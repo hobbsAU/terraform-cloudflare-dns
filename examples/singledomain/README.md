@@ -14,8 +14,8 @@ $ git clone https://github.com/hobbsAU/terraform-cloudflare-dns.git
 $ cd terraform-cloudflare-dns/examples/singledomain
 $ vim testdomain.vars
 $ terraform init
-$ terraform plan
-$ terraform apply
+$ terraform plan -var-file testdomain.vars
+$ terraform apply -var-file testdomain.vars
 ```
 
 Note: This example may create resources that cost money. Run `terraform destroy` to remove these resources.
