@@ -2,42 +2,42 @@
 
 # Define provider
 provider "cloudflare" {
-  version = "~> 2.0"
+  version   = "~> 2.0"
   api_token = var.cloudflare_token
 }
 
 
 resource "cloudflare_zone" "zone" {
   count = var.domain != "" ? 1 : 0
-  zone = var.domain
+  zone  = var.domain
 }
 
 
 resource "cloudflare_record" "common" {
-  count = var.domain != "" && (length(var.common_records) > 0) ? length(var.common_records) : 0
+  count   = var.domain != "" && (length(var.common_records) > 0) ? length(var.common_records) : 0
   zone_id = cloudflare_zone.zone[0].id
-  name = element(var.common_records[count.index], 0)
-  type = element(var.common_records[count.index], 1)
-  ttl = element(var.common_records[count.index], 2)
+  name    = element(var.common_records[count.index], 0)
+  type    = element(var.common_records[count.index], 1)
+  ttl     = element(var.common_records[count.index], 2)
   proxied = element(var.common_records[count.index], 3)
-  value = element(var.common_records[count.index], 4)
+  value   = element(var.common_records[count.index], 4)
 }
 
 resource "cloudflare_record" "mx" {
-  count = var.domain != "" && (length(var.mx_records) > 0) ? length(var.mx_records) : 0
-  zone_id = cloudflare_zone.zone[0].id
-  name = element(var.mx_records[count.index], 0)
-  type = "MX"
-  ttl = element(var.mx_records[count.index], 1)
+  count    = var.domain != "" && (length(var.mx_records) > 0) ? length(var.mx_records) : 0
+  zone_id  = cloudflare_zone.zone[0].id
+  name     = element(var.mx_records[count.index], 0)
+  type     = "MX"
+  ttl      = element(var.mx_records[count.index], 1)
   priority = element(var.mx_records[count.index], 2)
-  value = element(var.mx_records[count.index], 3)
+  value    = element(var.mx_records[count.index], 3)
 }
 
 resource "cloudflare_record" "srv" {
-  count  = var.domain != "" && (length(var.srv_records) > 0) ? length(var.srv_records) : 0
+  count   = var.domain != "" && (length(var.srv_records) > 0) ? length(var.srv_records) : 0
   zone_id = cloudflare_zone.zone[0].id
-  name   = "${element(var.srv_records[count.index], 0)}.${element(var.srv_records[count.index], 1)}.${var.domain}"
-  type   = "SRV"
+  name    = "${element(var.srv_records[count.index], 0)}.${element(var.srv_records[count.index], 1)}.${var.domain}"
+  type    = "SRV"
   proxied = "false"
 
   data = {
@@ -52,17 +52,17 @@ resource "cloudflare_record" "srv" {
 }
 
 resource "cloudflare_record" "tlsa" {
-  count  = var.domain != "" && (length(var.tlsa_records) > 0) ? length(var.tlsa_records) : 0
+  count   = var.domain != "" && (length(var.tlsa_records) > 0) ? length(var.tlsa_records) : 0
   zone_id = cloudflare_zone.zone[0].id
-  name   = element(var.tlsa_records[count.index], 0)
-  type   = "TLSA"
+  name    = element(var.tlsa_records[count.index], 0)
+  type    = "TLSA"
   proxied = "false"
 
   data = {
-    usage          = element(var.tlsa_records[count.index], 1)
-    selector       = element(var.tlsa_records[count.index], 2)
-    matching_type  = element(var.tlsa_records[count.index], 3)
-    certificate    = element(var.tlsa_records[count.index], 4)
+    usage         = element(var.tlsa_records[count.index], 1)
+    selector      = element(var.tlsa_records[count.index], 2)
+    matching_type = element(var.tlsa_records[count.index], 3)
+    certificate   = element(var.tlsa_records[count.index], 4)
   }
 }
 
