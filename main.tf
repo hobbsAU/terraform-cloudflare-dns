@@ -2,7 +2,6 @@
 
 # Define provider
 provider "cloudflare" {
-  version   = "~> 2.0"
   api_token = var.cloudflare_token
 }
 
